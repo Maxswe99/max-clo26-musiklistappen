@@ -66,7 +66,7 @@ ORDER BY song_name;
         return songs;
         
         // Tips: reader.GetInt32(0), reader.GetString(1) ... eller reader["Titel"].
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     /// <summary>Hämtar en specifik låt. Returnerar null om den inte finns.</summary>
