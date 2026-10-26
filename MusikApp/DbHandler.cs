@@ -50,31 +50,63 @@ public class DbHandler
 
         using var command = conn.CreateCommand();
         command.CommandText = @"
-SELECT song_name
-FROM songs
-ORDER BY song_name;
-";
+            SELECT songs.song_id, songs.song_name, albums.album_name, artist.stage_name
+            FROM songs
+            JOIN albums ON songs.album_id = albums.album_id
+            JOIN artist ON albums.artist_id = artist.artist_id
+            GROUP BY songs.song_name;
+            ";
         using var reader = command.ExecuteReader();
         
         // TODO: loopa med reader.Read() och gör ett Song-objekt av varje rad.
 
+        //detta var nog det svåraste hittills
         while (reader.Read())
         {
-            songs.Add(new Song(reader.GetString(0)));
+            //tvungen att ta med song_id då konstruktorn kräver det men används inte i program.cs
+            int songId = reader.GetInt32(0);
+            string songName = reader.GetString(1);
+            string albumName = reader.GetString(2);
+            string stageName = reader.GetString(3);
+            
+            songs.Add(new Song(songId, songName, albumName, stageName));
         }
 
         return songs;
         
         // Tips: reader.GetInt32(0), reader.GetString(1) ... eller reader["Titel"].
-        //throw new NotImplementedException();
+        // throw new NotImplementedException();
     }
 
     /// <summary>Hämtar en specifik låt. Returnerar null om den inte finns.</summary>
     public Song? GetSongById(int id)
     {
         // TODO: SELECT ... WHERE Id = @id (parameter!).
+        
+        using var conn = new SqliteConnection(_connectionString);
+        conn.Open();
+        
+        using var command = conn.CreateCommand();
+        command.CommandText = @"
+            SELECT song_id, song_name
+            FROM songs
+            WHERE song_id = @id;
+            ";
+        command.Parameters.AddWithValue("@id", id);
+        using var reader = command.ExecuteReader();
+
+        if (reader.Read())
+        {
+            int songId = reader.GetInt32(0);
+            string songName = reader.GetString(1);
+
+            //return new Song(songId, songName);
+        }
+
+        return null;
+        
         // TODO: if (reader.Read()) { ... } annars returnera null.
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
     }
 
     /// <summary>Söker låtar där titeln innehåller söktexten.</summary>
