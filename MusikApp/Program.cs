@@ -24,14 +24,14 @@ var db = new DbHandler(connectionString);
 
 while (on)
 {
-    Console.WriteLine("=== MUSIKLISTAPPEN ===");
-    Console.WriteLine("1. Visa alla låtar");
-    Console.WriteLine("2. Lägg till en låt");
+    Console.WriteLine("=== MUSIKLISTAPPEN feat. (J cole) ===");
+    Console.WriteLine("1. Visar alla låtar/album");
+    Console.WriteLine("2. Sök på titel eller artist");
     Console.WriteLine("3. Ta bort en låt");
     Console.WriteLine("4. Avsluta");
     Console.Write("Välj ett alternativ: ");
 
-// string? för att inte det ska kunna bli null
+// String? för att inte det ska kunna bli null
     string? choice = Console.ReadLine();
 
     switch (choice)
@@ -39,12 +39,13 @@ while (on)
         case "1":
             Console.WriteLine();
             dash();
+            Console.WriteLine("Song ID, Song name, Album name, Artist name");
+            dash();
             
             var songs = db.GetAllSongs();
-
             foreach (var song in songs)
             {
-                Console.WriteLine(song.Name);
+                Console.WriteLine($"{song.Id}, {song.Name}, {song.Album}, {song.Artist}");
             }
 
             dash();
@@ -53,6 +54,11 @@ while (on)
             break;
 
         case "2":
+            Console.Write("Skriv låtens id: 1-11 eller artist");
+            
+            //Song? showSong = db.GetSongById();
+            //Console.WriteLine($"Låten är: {song.Name}");
+            
             Console.WriteLine("Lägg till en låt senare.");
             break;
 
@@ -62,6 +68,7 @@ while (on)
 
         case "4":
             Console.WriteLine("Programmet avslutas.");
+            on = false;
             break;
 
         default:
