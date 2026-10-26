@@ -54,10 +54,10 @@ Du använder **SQLite** och din databas från diskografi-inlämningen. Du får a
 
 Minst tre av följande (välj själv vilka):
 
-- **Visa alla** låtar/album (lista i konsolen)
+- **Visa alla** låtar/album (lista i konsolen) ✅
 - **Lägg till** en ny låt eller ett nytt album
 - **Ta bort** en post (med bekräftelse: "Är du säker? j/n")
-- **Sök** på titel eller artist
+- **Sök** på titel eller artist ✅
 - **Visa detaljer** för en specifik post
 
 ### Kod
