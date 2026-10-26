@@ -27,7 +27,7 @@ while (on)
     Console.WriteLine("=== MUSIKLISTAPPEN feat. (J cole) ===");
     Console.WriteLine("1. Visar alla låtar/album");
     Console.WriteLine("2. Sök på titel eller artist");
-    Console.WriteLine("3. Ta bort en låt");
+    Console.WriteLine("3. Visa detaljer för en specifik post");
     Console.WriteLine("4. Avsluta");
     Console.Write("Välj ett alternativ: ");
 
@@ -39,10 +39,11 @@ while (on)
         case "1":
             Console.WriteLine();
             dash();
-            Console.WriteLine("Song ID, Song name, Album name, Artist name");
+            info();
             dash();
             
-            var songs = db.GetAllSongs();
+            List<Song> songs = db.GetAllSongs();
+            
             foreach (var song in songs)
             {
                 Console.WriteLine($"{song.Id}, {song.Name}, {song.Album}, {song.Artist}");
@@ -54,16 +55,33 @@ while (on)
             break;
 
         case "2":
-            Console.Write("Skriv låtens id: 1-11 eller artist");
+            Console.Write("Sök på låt eller artist: ");
+            string searchText = Console.ReadLine() ?? "";
+
+            List<Song> searchSongs = db.SearchSongs(searchText);
             
-            //Song? showSong = db.GetSongById();
-            //Console.WriteLine($"Låten är: {song.Name}");
+            Console.WriteLine();
+            dash();
+            info();
+            dash();
+            foreach (var song in searchSongs)
+            {
+                Console.WriteLine($"{song.Id}, {song.Name}, {song.Album}, {song.Artist}");
+            }
             
-            Console.WriteLine("Lägg till en låt senare.");
+            // Resultatet kommer tillbaka utan att hitta några låtar
+            if (searchSongs.Count == 0)
+            {
+                Console.WriteLine("Ingen låt eller artist hittades.");
+            }
+
+            dash();
+            Console.WriteLine("Klicka på [Enter] för att gå tillbaka till huvudmenyn");
+            Console.ReadLine();
             break;
 
         case "3":
-            Console.WriteLine("Ta bort en låt senare.");
+            Console.WriteLine("Visa detaljer för en specifik post");
             break;
 
         case "4":
@@ -80,4 +98,8 @@ while (on)
 
 void dash() {
 Console.WriteLine("--------------------------------------------");
+}
+
+void info() {
+    Console.WriteLine("Song ID, Song name, Album name, Artist name");
 }
