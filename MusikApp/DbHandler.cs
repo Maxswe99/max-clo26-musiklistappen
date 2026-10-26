@@ -23,11 +23,15 @@ public class DbHandler
     // Tips: spara bara connection string här. Den kommer från appsettings.json
     // via Program.cs (t.ex. "Data Source=musik.db").
     // Öppna sedan en NY anslutning inuti varje metod nedan.
+    private string _connectionString;
 
     public DbHandler(string connectionString)
     {
         // TODO: spara connectionString i ett fält som metoderna nedan kan använda.
-        throw new NotImplementedException();
+        
+        _connectionString = connectionString;
+        
+        //throw new NotImplementedException();
     }
 
     // ---------------------------------------------------------------
@@ -38,7 +42,29 @@ public class DbHandler
     public List<Song> GetAllSongs()
     {
         // TODO: SELECT från din låt-tabell med ORDER BY.
+        
+        var songs = new List<Song>();
+
+        using var conn = new SqliteConnection(_connectionString);
+        conn.Open();
+
+        using var command = conn.CreateCommand();
+        command.CommandText = @"
+SELECT song_name
+FROM songs
+ORDER BY song_name;
+";
+        using var reader = command.ExecuteReader();
+        
         // TODO: loopa med reader.Read() och gör ett Song-objekt av varje rad.
+
+        while (reader.Read())
+        {
+            songs.Add(new Song(reader.GetString(0)));
+        }
+
+        return songs;
+        
         // Tips: reader.GetInt32(0), reader.GetString(1) ... eller reader["Titel"].
         throw new NotImplementedException();
     }

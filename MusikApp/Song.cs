@@ -8,4 +8,10 @@ namespace MusikApp;
 // Behöver du fler klasser (Album, Artist) för din app? Skapa dem i egna filer.
 public class Song
 {
+    public string Name { get; set; }
+
+    public Song(string name)
+    {
+        Name = name;
+    }
 }
