@@ -77,7 +77,65 @@ while (on)
             Console.WriteLine();
             Dash();
 
-            foreach (var song in details)
+            //fick en del hjälp av ai med att sortera artist och låtar för sig själv
+            if (details != null && details.Count > 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("--- Artist Info ---");
+                Console.WriteLine();
+
+                // En lista där vi sparar namnen på alla artister vi redan skrivit ut
+                List<string> printedArtists = new List<string>();
+
+                foreach (var artist in details)
+                {
+                    // Kolla om vi INTE redan har skrivit ut denna artist
+                    if (!printedArtists.Contains(artist.StageName))
+                    {
+                        Console.WriteLine($"Artist first name: {artist.FirstName}");
+                        Console.WriteLine($"Artist last name: {artist.LastName}");
+                        Console.WriteLine($"Artist stage name: {artist.StageName}");
+                        Console.WriteLine($"Artists origin: {artist.Origin}");
+                        Console.WriteLine($"Active since: {artist.ActiveSince}");
+                        Console.WriteLine();
+
+                        // Lägg till artisten i listan så vi vet att hen är färdigutskriven!
+                        printedArtists.Add(artist.StageName);
+                    }
+                }
+                
+                Console.WriteLine("--- Songs ---");
+                Console.WriteLine();
+
+                foreach (var song in details)
+                {
+                    Console.WriteLine($"Song ID: {song.Id}");
+                    Console.WriteLine($"Song name: {song.Name}");
+                    Console.WriteLine($"Song Duration (seconds): {song.DurationSeconds}");
+                    Console.WriteLine($"Single release?: {song.IsSingle}");
+                    Console.WriteLine($"Album Name: {song.Album}");
+                    Console.WriteLine($"Release date: {song.ReleaseDate}");
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Inga träffar hittades.");
+            }
+  
+                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            /*foreach (var song in details)
             {
                 Console.WriteLine($"Song ID: {song.Id}");
                 Console.WriteLine($"Song name: {song.Name}");
@@ -92,8 +150,7 @@ while (on)
                 Console.WriteLine($"Active since: {song.ActiveSince}");
                 
                 Console.WriteLine();
-            }
-            
+            }*/
             Dash();
             PressEnter();
             Console.ReadLine();
