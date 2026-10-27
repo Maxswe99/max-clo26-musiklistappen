@@ -46,9 +46,9 @@ Du använder **SQLite** och din databas från diskografi-inlämningen. Du får a
 
 ### Appen
 
-- Startar och visar en **huvudmeny** med alternativ numrerade 1–N
-- Användaren navigerar genom att skriva ett nummer och trycka Enter
-- Appen avslutar snyggt när användaren väljer "Avsluta"
+- Startar och visar en **huvudmeny** med alternativ numrerade 1–N ✅
+- Användaren navigerar genom att skriva ett nummer och trycka Enter ✅
+- Appen avslutar snyggt när användaren väljer "Avsluta" ✅
 
 ### Vad menyn ska kunna göra
 
@@ -62,9 +62,9 @@ Minst tre av följande (välj själv vilka):
 
 ### Kod
 
-- Minst en klass för din data, t.ex. `Song`, `Album` eller `Artist`
-- Databasens logik i klassen `DbHandler`, inte allt i `Program.cs`
-- Parameteriserade queries — inte strängkonkatenering
+- Minst en klass för din data, t.ex. `Song`, `Album` eller `Artist` ✅
+- Databasens logik i klassen `DbHandler`, inte allt i `Program.cs` ✅
+- Parameteriserade queries — inte strängkonkatenering ✅
 
 ### Inlämning
 
