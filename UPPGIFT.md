@@ -58,7 +58,7 @@ Minst tre av följande (välj själv vilka):
 - **Lägg till** en ny låt eller ett nytt album
 - **Ta bort** en post (med bekräftelse: "Är du säker? j/n")
 - **Sök** på titel eller artist ✅
-- **Visa detaljer** för en specifik post
+- **Visa detaljer** för en specifik post ✅
 
 ### Kod
 
