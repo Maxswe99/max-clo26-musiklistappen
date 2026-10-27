@@ -122,35 +122,7 @@ while (on)
             {
                 Console.WriteLine("Inga träffar hittades.");
             }
-  
-                
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            /*foreach (var song in details)
-            {
-                Console.WriteLine($"Song ID: {song.Id}");
-                Console.WriteLine($"Song name: {song.Name}");
-                Console.WriteLine($"Song Duration: (seconds): {song.DurationSeconds}");
-                Console.WriteLine($"Single release?: {song.IsSingle}");
-                Console.WriteLine($"Album Name: {song.Album}");
-                Console.WriteLine($"Release date: {song.ReleaseDate}");
-                Console.WriteLine($"Artist first name: {song.FirstName}");
-                Console.WriteLine($"Artist last name: {song.LastName}");
-                Console.WriteLine($"Artist stage name: {song.StageName}");
-                Console.WriteLine($"Artists origin: {song.Origin}");
-                Console.WriteLine($"Active since: {song.ActiveSince}");
-                
-                Console.WriteLine();
-            }*/
             Dash();
             PressEnter();
             Console.ReadLine();
