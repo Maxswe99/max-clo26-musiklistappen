@@ -2,22 +2,6 @@ using Microsoft.Data.Sqlite;
 
 namespace MusikApp;
 
-/// <summary>
-/// ALL databaskod bor här. Program.cs ska aldrig innehålla SQL eller SqliteConnection.
-///
-/// Det här är ett skelett: metoderna finns, kommentarerna visar vad varje metod ska göra,
-/// men koden är din. Alla metoder kastar NotImplementedException tills du har skrivit dem.
-///
-/// ADO.NET i fem steg (samma i varje metod som pratar med databasen):
-///   1. Öppna en anslutning        -> new SqliteConnection(...) och connection.Open()
-///   2. Skapa ett kommando         -> connection.CreateCommand()
-///   3. Skriv SQL:en               -> command.CommandText = "..."
-///   4. Skicka in värden säkert    -> command.Parameters.AddWithValue("@namn", värde)
-///   5. Kör kommandot              -> ExecuteReader() för SELECT, ExecuteNonQuery() för INSERT/DELETE
-///
-/// Använd "using var" på anslutning och kommando så stängs de av sig själva.
-/// Bygg SQL:en med parametrar (@titel), aldrig genom att klistra ihop strängar.
-/// </summary>
 public class DbHandler
 {
     private string _connectionString;
@@ -26,11 +10,7 @@ public class DbHandler
     {
         _connectionString = connectionString;
     }
-
-    // ---------------------------------------------------------------
-    // G-nivå: du behöver minst tre av de fem här (välj själv vilka)
-    // ---------------------------------------------------------------
-
+    
     /// <summary>Hämtar alla låtar, sorterade på titel.</summary>
     public List<Song> GetAllSongs()
     {
@@ -70,14 +50,6 @@ public class DbHandler
         return songs;
     }
 
-    /// <summary>Hämtar en specifik låt. Returnerar null om den inte finns.</summary>
-    public Song? GetSongById(int id)
-    {
-        // TODO: SELECT ... WHERE Id = @id (parameter!).
-        // TODO: if (reader.Read()) { ... } annars returnera null.
-         throw new NotImplementedException();
-    }
-
     /// <summary>Söker låtar där titeln innehåller söktexten.</summary>
     public List<Song> SearchSongs(string searchText)
     {
@@ -113,39 +85,60 @@ public class DbHandler
 
         return songs;
     }
-
-    /// <summary>Lägger till en ny låt.</summary>
-    public void AddSong(Song song)
+    
+    /// <summary>Visar utökad information där titeln eller artisten innehåller söktexten.</summary>
+    public List<Song> ShowDetails(string details)
     {
-        // TODO: INSERT INTO ... VALUES (@titel, @langd, ...) med parametrar.
-        // Tips: INSERT ger ingen data tillbaka, så använd ExecuteNonQuery().
-        throw new NotImplementedException();
-    }
+        var songs = new List<Song>();
+        
+        using var conn = new SqliteConnection(_connectionString);
+        conn.Open();
+        
+        //fick hjälp av ai med "CAST" då man inte kunde söka på tex "2014" från albumet som heter "2014 Forest Hills Drive"
+        using var command = conn.CreateCommand();
+        command.CommandText = @"
+            SELECT 
+            songs.song_id, 
+            songs.song_name, 
+            songs.duration_seconds, 
+            songs.is_single, 
+            albums.album_name, 
+            albums.release_date, 
+            artist.first_name, 
+            artist.last_name, 
+            artist.stage_name, 
+            artist.origin, 
+            artist.active_since
+            FROM songs
+            LEFT JOIN albums ON songs.album_id = albums.album_id
+            LEFT JOIN song_artists ON songs.song_id = song_artists.song_id
+            LEFT JOIN artist ON song_artists.artist_id = artist.artist_id
+            WHERE songs.song_name LIKE @search
+            OR albums.album_name LIKE @search
+            OR CAST(albums.release_date AS TEXT) LIKE @search
+            OR artist.stage_name LIKE @search;
+            ";
+        command.Parameters.AddWithValue("@search", $"%{details}%");
+        
+        using var reader = command.ExecuteReader();
+        
+        while (reader.Read())
+        {
+            int songId = reader.GetInt32(0);
+            string songName = reader.GetString(1);
+            int durationSeconds = reader.GetInt32(2);
+            bool isSingle = reader.GetBoolean(3);
+            string albumName = reader.GetString(4);
+            int releaseDate = reader.GetInt32(5);
+            string firstName = reader.GetString(6);
+            string lastName = reader.GetString(7);
+            string stageName = reader.GetString(8);
+            string origin = reader.GetString(9);
+            int activeSince = reader.GetInt32(10);
 
-    /// <summary>Tar bort en låt. Returnerar true om en rad faktiskt togs bort.</summary>
-    public bool DeleteSong(int id)
-    {
-        // TODO: DELETE FROM ... WHERE Id = @id.
-        // Tips: ExecuteNonQuery() returnerar antalet påverkade rader.
-        // Menyn i Program.cs ska fråga "Är du säker? j/n" innan den här metoden anropas.
-        throw new NotImplementedException();
-    }
+            songs.Add(new Song(songId, songName, durationSeconds, isSingle, albumName, releaseDate, firstName, lastName, stageName, origin, activeSince));
+        }
 
-    // ---------------------------------------------------------------
-    // VG-nivå: du behöver minst EN av dessa två (och reflektionen i README)
-    // ---------------------------------------------------------------
-
-    /// <summary>(VG, alternativ A) Låtar tillsammans med albumets namn. Kräver en JOIN.</summary>
-    public List<(string SongTitle, string AlbumName)> GetSongsWithAlbum()
-    {
-        // TODO: SELECT Låtar.Titel, Album.Namn FROM Låtar JOIN Album ON ... ORDER BY ...
-        throw new NotImplementedException();
-    }
-
-    /// <summary>(VG, alternativ B) Låtar som är längre än medellängden. Kräver en subquery.</summary>
-    public List<Song> GetSongsLongerThanAverage()
-    {
-        // TODO: SELECT ... WHERE Längd > (SELECT AVG(Längd) FROM Låtar).
-        throw new NotImplementedException();
+        return songs;
     }
 }
