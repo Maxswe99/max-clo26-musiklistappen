@@ -4,22 +4,31 @@
 
 ## Vad appen gör
 
-[Skriv här: två till tre meningar om din app. Vilken artist handlar den om och vad kan man göra i menyn?]
-Min musik app handlar om information om en artist och vilka låtar samt album han har gjort
-appen visar en start meny där användaren integrerar med knappval som visar information
-du kan visa alla låtar och vilka som har deltagit i skapandet av låtar/album och visa detaljerad information
+Musiklistappen innehåller information om J. Cole, hans låtar, album och medverkande artister.
+Via huvudmenyn kan användaren visa alla låtar, söka efter låt eller artist och visa
+detaljerad information om låtar, album och artister.
 
 ## Så kör du den
 
 ```bash
-git clone [länk till din fork]
-cd [mappens namn]/MusikApp
+git clone https://github.com/Maxswe99/max-clo26-musiklistappen.git
+cd max-clo26-musiklistappen/MusikApp
 dotnet run
 ```
 
-[Skriv här om något behöver göras först, t.ex. att `musik.db` ska ligga i mappen `MusikApp/`.]
+Databasen `musik.db` ska ligga i mappen `MusikApp/`. Om `appsettings.json`
+saknas, kopiera `appsettings.example.json` och döp kopian till `appsettings.json`.
 
 ## Så ser huvudmenyn ut
 
-[Lägg in en screenshot här. Spara bilden i repot och länka den: `![Huvudmenyn](bild.png)`]
-![meny](Bilder/meny.png)
+![Huvudmenyn](Bilder/meny.png)
+
+## Mina designval
+
+Databasen är uppdelad i tabeller för låtar, album och artister. Det minskar
+duplicerad information och gör relationerna mellan låtar, album och artister
+tydliga.
+
+Jag använder `JOIN` i appen för att hämta information från flera tabeller i
+samma fråga. Det passar appen eftersom en låt ska visas tillsammans med sitt
+album och sin artist.
