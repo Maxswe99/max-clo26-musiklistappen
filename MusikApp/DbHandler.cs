@@ -97,7 +97,7 @@ public class DbHandler
         //fick hjälp av ai med "CAST" då man inte kunde söka på tex "2014" från albumet som heter "2014 Forest Hills Drive"
         using var command = conn.CreateCommand();
         command.CommandText = @"
-            SELECT 
+            SELECT
             songs.song_id, 
             songs.song_name, 
             songs.duration_seconds, 
@@ -130,12 +130,12 @@ public class DbHandler
             bool isSingle = reader.GetBoolean(3);
             string albumName = reader.GetString(4);
             int releaseDate = reader.GetInt32(5);
-            string firstName = reader.GetString(6);
-            string lastName = reader.GetString(7);
+            string firstName = reader.IsDBNull(6) ? "null" : reader.GetString(6);
+            string lastName = reader.IsDBNull(7) ? "null" : reader.GetString(7);
             string stageName = reader.GetString(8);
             string origin = reader.GetString(9);
             int activeSince = reader.GetInt32(10);
-
+            
             songs.Add(new Song(songId, songName, durationSeconds, isSingle, albumName, releaseDate, firstName, lastName, stageName, origin, activeSince));
         }
 
