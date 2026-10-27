@@ -32,3 +32,6 @@ tydliga.
 Jag använder `JOIN` i appen för att hämta information från flera tabeller i
 samma fråga. Det passar appen eftersom en låt ska visas tillsammans med sitt
 album och sin artist.
+
+Om jag byggde appen från början igen skulle jag lägga mer tid på tydligare
+felmeddelanden och bättre validering av användarens inmatning. (visas tydligt i dotnet run)
