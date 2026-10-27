@@ -1,7 +1,5 @@
 using Microsoft.Extensions.Configuration;using MusikApp;
 
-// Läser inställningar från appsettings.json (samma sätt som i hero_databas).
-// Databasens sökväg ligger där, så du slipper skriva den i koden.
 var config = new ConfigurationBuilder()
     .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("appsettings.json", optional: false)
@@ -10,15 +8,6 @@ var config = new ConfigurationBuilder()
 var connectionString = config.GetConnectionString("Default")
     ?? throw new InvalidOperationException("Hittar ingen connection string 'Default' i appsettings.json.");
 
-// Börja här. Den här raden visar att inställningarna lästes in, ta bort den när du vill.
-Console.WriteLine($"Musiklistappen: börja med att få menyn att fungera!  (databas: {connectionString})");
-
-// Tips på ordning (se UPPGIFT.md):
-//   1. Rita upp huvudmenyn (alternativ numrerade 1-N) och läs in ett val med Console.ReadLine().
-//      Skriv ut "Här kommer en lista senare" tills databasen är kopplad.
-//   2. Skapa ett DbHandler-objekt: new DbHandler(connectionString)
-//   3. Anropa DbHandlers metoder från menyn. Här ska ALDRIG SQL stå.
-//   4. Avsluta snyggt när användaren väljer "Avsluta".
 bool on = true;
 var db = new DbHandler(connectionString);
 
@@ -38,9 +27,9 @@ while (on)
     {
         case "1":
             Console.WriteLine();
-            dash();
-            info();
-            dash();
+            Dash();
+            Info();
+            Dash();
             
             List<Song> songs = db.GetAllSongs();
             
@@ -49,8 +38,8 @@ while (on)
                 Console.WriteLine($"{song.Id}, {song.Name}, {song.Album}, {song.Artist}");
             }
 
-            dash();
-            Console.WriteLine("Klicka på [Enter] för att gå tillbaka till huvudmenyn");
+            Dash();
+            PressEnter();
             Console.ReadLine();
             break;
 
@@ -61,9 +50,9 @@ while (on)
             List<Song> searchSongs = db.SearchSongs(searchText);
             
             Console.WriteLine();
-            dash();
-            info();
-            dash();
+            Dash();
+            Info();
+            Dash();
             foreach (var song in searchSongs)
             {
                 Console.WriteLine($"{song.Id}, {song.Name}, {song.Album}, {song.Artist}");
@@ -75,17 +64,45 @@ while (on)
                 Console.WriteLine("Ingen låt eller artist hittades.");
             }
 
-            dash();
-            Console.WriteLine("Klicka på [Enter] för att gå tillbaka till huvudmenyn");
+            Dash();
+            PressEnter();
             Console.ReadLine();
             break;
 
         case "3":
-            Console.WriteLine("Visa detaljer för en specifik post");
+            Console.Write("Sök på låt/album/artist: ");
+            string? input = Console.ReadLine();
+
+            List<Song> details = db.ShowDetails(input);
+            Console.WriteLine();
+            Dash();
+
+            foreach (var song in details)
+            {
+                Console.WriteLine($"Song ID: {song.Id}");
+                Console.WriteLine($"Song name: {song.Name}");
+                Console.WriteLine($"Song Duration: (seconds): {song.DurationSeconds}");
+                Console.WriteLine($"Single release?: {song.IsSingle}");
+                Console.WriteLine($"Album Name: {song.Album}");
+                Console.WriteLine($"Release date: {song.ReleaseDate}");
+                Console.WriteLine($"Artist first name: {song.FirstName}");
+                Console.WriteLine($"Artist last name: {song.LastName}");
+                Console.WriteLine($"Artist stage name: {song.StageName}");
+                Console.WriteLine($"Artists origin: {song.Origin}");
+                Console.WriteLine($"Active since: {song.ActiveSince}");
+                
+                Console.WriteLine();
+            }
+            
+            Dash();
+            PressEnter();
+            Console.ReadLine();
             break;
 
         case "4":
             Console.WriteLine("Programmet avslutas.");
+            Console.WriteLine("Tack för att du använde MUSIKLISTAPPEN feat. (J cole)!");
+            Console.WriteLine("Du kan ge feedback på google classroom med skalan 1-3 :)");
             on = false;
             break;
 
@@ -96,10 +113,14 @@ while (on)
     }
 }
 
-void dash() {
+void Dash() {
 Console.WriteLine("--------------------------------------------");
 }
 
-void info() {
+void Info() {
     Console.WriteLine("Song ID, Song name, Album name, Artist name");
+}
+
+void PressEnter() {
+    Console.WriteLine("Klicka på [Enter] för att gå tillbaka till huvudmenyn");
 }
