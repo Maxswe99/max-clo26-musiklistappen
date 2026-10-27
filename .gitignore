@@ -1,12 +1,14 @@
 bin/
 obj/
 .vs/
+.idea/
 *.user
 *.suo
 # Din .db-fil får följa med i repot, men inte SQLites tillfälliga filer:
 *.db-journal
 *.db-wal
 *.db-shm
+*.sqbpro
 
 # appsettings.json ska normalt INTE checkas in (se hero_databas, labb 1).
 # I den här mallen följer en färdig fil ändå med så att appen fungerar direkt efter forken,
